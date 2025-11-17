@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Escape Room - Código Azul</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #050811;
+            color: #f0f8ff;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            padding: 20px;
+            background: linear-gradient(90deg, #020616, #042f4b);
+            border-bottom: 1px solid #0ff;
+        }
+        h1 {
+            color: #00e5ff;
+            margin-bottom: 5px;
+        }
+        h2 {
+            color: #00e5ff;
+        }
+        .contenedor {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .acertijo {
+            border: 1px solid #0ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            background-color: #0b1220;
+            box-shadow: 0 0 10px rgba(0, 238, 255, 0.25);
+        }
+        .pregunta {
+            font-size: 1.05rem;
+            margin-bottom: 15px;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 18px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+        .btn-correcto {
+            background-color: #065f46;
+            color: #e0ffe0;
+        }
+        .btn-incorrecto {
+            background-color: #7f1d1d;
+            color: #ffe0e0;
+        }
+        .btn-correcto:hover {
+            background-color: #047857;
+        }
+        .btn-incorrecto:hover {
+            background-color: #b91c1c;
+        }
+        .timer {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #9ca3af;
+        }
+        footer {
+            margin-top: 30px;
+            padding: 10px;
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+        .resumen {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px dashed #4b5563;
+            font-size: 0.9rem;
+            background-color: #020617;
+        }
+    </style>
+    <script>
+        let puntaje = 0;
+        let respondidos = 0;
+
+        function correcto(mensaje) {
+            alert("✅ Correcto: " + mensaje);
+            puntaje += 1;
+            respondidos += 1;
+            actualizarResumen();
+        }
+
+        function incorrecto(mensaje) {
+            alert("❌ Incorrecto: " + mensaje);
+            respondidos += 1;
+            actualizarResumen();
+        }
+
+        function actualizarResumen() {
+            const resumen = document.getElementById("resumen");
+            resumen.innerHTML = "Preguntas respondidas: " + respondidos +
+                " | Respuestas correctas: " + puntaje +
+                " de 3";
+            if (respondidos === 3) {
+                const final = document.getElementById("mensaje-final");
+                if (puntaje === 3) {
+                    final.innerHTML = "🎉 ¡Excelente! Has identificado correctamente todas las vulnerabilidades. El hospital digital ha contenido la amenaza.";
+                } else if (puntaje === 2) {
+                    final.innerHTML = "👌 Buen trabajo. Has identificado la mayoría de las vulnerabilidades, pero aún hay espacio para mejorar la detección temprana.";
+                } else {
+                    final.innerHTML = "⚠ Aún hay riesgos críticos sin detectar. En un entorno real, esto podría comprometer la seguridad del paciente y del hospital.";
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>🔵 Escape Room – Código Azul</h1>
+        <p>Identifica la vulnerabilidad explotada en cada escenario del hospital digital.</p>
+        <p class="timer">⏱ Tiempo sugerido: 30 segundos por acertijo (controlado por el docente en la exposición).</p>
+    </header>
+
+    <div class="contenedor">
+        <div class="acertijo">
+            <h2>Acertijo 1 – Historia Clínica Fantasma</h2>
+            <p class="pregunta">
+                El sistema del hospital registra un acceso remoto a la Historia Clínica Electrónica (HCE) 
+                de un paciente desde una ubicación inusual. La conexión no utiliza cifrado robusto y se detectan 
+                paquetes interceptados en la red.
+            </p>
+            <p><strong>¿Qué vulnerabilidad está siendo explotada principalmente?</strong></p>
+            <button class="btn-correcto"
+                    onclick="correcto('La falta de cifrado permite la intercepción y lectura de la HCE.')">
+                A) Falta de cifrado en las historias clínicas
+            </button>
+            <button class="btn-incorrecto"
+                    onclick="incorrecto('El sistema puede fallar, pero el problema clave aquí es el cifrado débil.')">
+                B) Fallo general del sistema
+            </button>
+            <button class="btn-incorrecto"
+                    onclick="incorrecto('Cerrar sesión es importante, pero el factor crítico aquí es la intercepción de datos.')">
+                C) Sesión abierta de un usuario interno
+            </button>
+        </div>
+
+        <div class="acertijo">
+            <h2>Acertijo 2 – Bomba de Infusión Rebelde</h2>
+            <p class="pregunta">
+                Una bomba de infusión conectada a la red del hospital comienza a modificar la dosis de un medicamento 
+                sin que el personal haya hecho cambios. La revisión técnica revela que el dispositivo mantenía la 
+                contraseña por defecto de fábrica y no tenía firmware actualizado.
+            </p>
+            <p><strong>¿Qué vulnerabilidad está siendo explotada principalmente?</strong></p>
+            <button class="btn-incorrecto"
+                    onclick="incorrecto('No hay evidencia de manipulación física directa del dispositivo.')">
+                A) Ataque físico dentro de la habitación
+            </button>
+            <button class="btn-correcto"
+                    onclick="correcto('El IoT médico vulnerable con contraseñas por defecto y sin actualizaciones es el punto débil.')">
+                B) IoT médico vulnerable por contraseñas por defecto
+            </button>
+            <button class="btn-incorrecto"
+                    onclick="incorrecto('Una falla eléctrica podría apagar el dispositivo, pero no justifica cambios en la dosis.')">
+                C) Falla eléctrica general
+            </button>
+        </div>
+
+        <div class="acertijo">
+            <h2>Acertijo 3 – Correo del “Doctor TI”</h2>
+            <p class="pregunta">
+                Diversos médicos reciben un correo que aparenta ser del área de Soporte TI indicando: 
+                “Actualice urgentemente su usuario de acceso a HCE desde este enlace”. 
+                El enlace dirige a una página falsa que captura usuario y contraseña.
+            </p>
+            <p><strong>¿Qué vulnerabilidad está siendo explotada principalmente?</strong></p>
+            <button class="btn-incorrecto"
+                    onclick="incorrecto('El cambio de políticas puede generar confusión, pero aquí hay un engaño intencional.')">
+                A) Cambio legítimo de políticas internas
+            </button>
+            <button class="btn-correcto"
+                    onclick="correcto('Se trata de un ataque de phishing que explota el factor humano y la falta de capacitación.')">
+                B) Phishing dirigido al personal médico
+            </button>
+            <button class="btn-incorrecto"
+                    onclick="incorrecto('La latencia de la red no explica el robo de credenciales.')">
+                C) Problemas de latencia en la red
+            </button>
+        </div>
+
+        <div class="resumen" id="resumen">
+            Preguntas respondidas: 0 | Respuestas correctas: 0 de 3
+        </div>
+        <div id="mensaje-final" style="margin-top:15px; font-weight:bold;"></div>
+    </div>
+
+    <footer>
+        <p>Actividad 3 – TIC para la Prevención y Control de Delitos Informáticos | Hospital Digital – Código Azul</p>
+    </footer>
+</body>
+</html>
